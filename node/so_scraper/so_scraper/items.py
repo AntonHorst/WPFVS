@@ -11,6 +11,7 @@ Evtl müssen die in und output Processoren noch für alle Felder definiert werde
 
 
 import scrapy
+from scrapy.loader.processors import Compose
 """
 str ist wie folgt aufgebaut: "12 views"
 die Methode gibt den vorne stehenden Integer Wert zurück
@@ -26,10 +27,9 @@ class SoScraperItem(scrapy.Item):
 	answers = scrapy.Field()
 	#Aufruf der parseViews Methode beim füllen des Fields über einen Loader
 	views = scrapy.Field(
-		input_processor=MapCompose(parseViews),
-		output_processor=TakeFirst(),
+		input_processor=Compose(parseViews),
+		#output_processor=TakeFirst(),
 	)
-    pass
 
 
 

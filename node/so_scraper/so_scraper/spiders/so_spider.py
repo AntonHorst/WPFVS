@@ -3,7 +3,7 @@ from so_scraper.items import SoScraperItem
 from scrapy.loader import ItemLoader
 
 class so_spider(scrapy.Spider):
-	name = "so_question"
+	name = "so_questions"
 
 	def start_requests(self):
 		urls = [
