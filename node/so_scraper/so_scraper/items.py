@@ -26,10 +26,10 @@ class SoScraperItem(scrapy.Item):
 	votes = scrapy.Field()
 	answers = scrapy.Field()
 	#Aufruf der parseViews Methode beim füllen des Fields über einen Loader
-	views = scrapy.Field(
-		input_processor=Compose(parseViews),
-		#output_processor=TakeFirst(),
-	)
+	views = scrapy.Field()
+#		input_processor=Compose(parseViews),
+#		#output_processor=TakeFirst(),
+#	)
 
 
 
