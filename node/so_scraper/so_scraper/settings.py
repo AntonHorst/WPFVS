@@ -88,3 +88,9 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+#Enable Json Export Feed
+#FEED_EXPORTERS = {
+#	'json': 'scrapy.exporters.JsonItemExporter',
+#}
+#FEED_URI = file:/PathToFile

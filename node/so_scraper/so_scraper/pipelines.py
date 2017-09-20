@@ -8,4 +8,8 @@
 
 class SoScraperPipeline(object):
     def process_item(self, item, spider):
-        return item
+		answers=item['answers'][1]
+		filename = 'output.txt'
+		with open(filename, 'a') as f:
+			f.write(answers)
+		return item

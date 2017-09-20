@@ -9,27 +9,35 @@
 Evtl müssen die in und output Processoren noch für alle Felder definiert werden
 """
 
-
+import re
 import scrapy
-from scrapy.loader.processors import Compose
+from scrapy.loader.processors import MapCompose
+
 """
 str ist wie folgt aufgebaut: "12 views"
 die Methode gibt den vorne stehenden Integer Wert zurück
 """
-def parseViews(str):
-	return int(str.split(' ', 1)[0])
+def parseInt(string1):
+	return int(re.search(r'\d+',string1).group())
+
+#def parseList(liste):
+#	l = ''.join(map(str, liste))
+#	return l
+
 
 class SoScraperItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
 	tags = scrapy.Field()
 	votes = scrapy.Field()
-	answers = scrapy.Field()
-	#Aufruf der parseViews Methode beim füllen des Fields über einen Loader
-	views = scrapy.Field()
-#		input_processor=Compose(parseViews),
+	answers = scrapy.Field(
+		#input_processor=MapCompose(parseList)
+	)
+	#Aufruf der parseViews Methode beim fuellen des Fields über einen Loader
+	views = scrapy.Field(
+		input_processor=MapCompose(parseInt),
 #		#output_processor=TakeFirst(),
-#	)
+	)
 
 
 

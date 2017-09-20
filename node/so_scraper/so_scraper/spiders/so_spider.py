@@ -1,14 +1,15 @@
 import scrapy
 from so_scraper.items import SoScraperItem
 from scrapy.loader import ItemLoader
+from scrapy.loader.processors import Join
 
 class so_spider(scrapy.Spider):
 	name = "so_questions"
 
 	def start_requests(self):
 		urls = [
-			'https://stackoverflow.com/questions?page=2&sort=newest',
-			'https://stackoverflow.com/questions?page=3&sort=newest',
+			'https://stackoverflow.com/questions?page=2000&sort=newest',
+			'https://stackoverflow.com/questions?page=3000&sort=newest',
 		]
 		for url in urls:
 			yield scrapy.Request(url=url, callback=self.parse)
@@ -20,13 +21,15 @@ class so_spider(scrapy.Spider):
 			TAG_SELECTOR = '.post-tag ::text'
 			VIEW_SELECTOR = '.views ::text'
 			VOTE_SELECTOR = '.vote-count-post ::text'
-			ANSWER_SELECTOR = '.status answered ::text'
-			
+			ANSWER_SELECTOR = '.status ::text'
+			UNANSWERED_SELECTOR = '.status unanswered ::text'
+			answers = question.css('.status')
 			l.add_css('tags', TAG_SELECTOR)
 			#l.add_value('tagAmount', len(question.css(TAG_SELECTOR)))
 			l.add_css('views', VIEW_SELECTOR)
 			l.add_css('votes', VOTE_SELECTOR)
 			l.add_css('answers', ANSWER_SELECTOR)
+			#l.add_css('answers', UNANSWERED_SELECTOR)
 			yield l.load_item()
 			"""	
 			yield{
