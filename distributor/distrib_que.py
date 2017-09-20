@@ -17,4 +17,3 @@ while i <= limit:
 		
 in for schlafe an die Que weiter geben!
 
-Twisted 
