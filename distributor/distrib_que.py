@@ -223,7 +223,12 @@ while i <= limit:
 		j = j +1
 		
 	urls.insert(0,current_agent)
-	ua_counter=ua_counter+1
+	
+	if ua_counter >= 200:  
+		ua_counter=0
+	else:
+		ua_counter=ua_counter+1
+		
 	i=i+50
 		
 
