@@ -5,9 +5,14 @@ import signal
 import re
 import array
 import scraper #Scraper Klasse die es mit dem Arbeitspaket vorzubereiten gilt
+from requests import get
+from scrapy.crawler import CrawlerProcess
+from so_scraper.so_scraper.spiders import so_spider
 
 distributor_ip = "192.168.56.102" #IP des Verteilers
 distributor_port = 45678          #Port des Verteilprozesses
+distibution_port = 45679          #Prot der Rest API
+path = '/distributor'
 
 #Verbindung zum Verteiler aufbauen
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -15,21 +20,16 @@ s.connect((distributor_ip, distributor_port))
 
 #Schleife 
 while True:
-    #Empfang des Arbeitsauftrags abhaengig vom Distributor aendern
+    #Empfang des Start Sgnals
     sig = s.recv()
-    #WeckSignal empfangen
-    if isinstance(sig, int):
-        #Dem Verteiler die eigene IP und Portnummer senden
-        s.send(s.getsockname()[0])
-    #Wenn das Empfangene kein Integer Wert ist muss es das Arbetispaket sein
-    else:
-        """
-        Dieser Teil muss noch komplett an die Scraper Klasse angepasst werden
-        """
-        #Scraper vorbereiten
-        #Urls aus dem Arbeitspaket uebergeben
-        scraper.setStartUrls(sig[0])
-        #User Agent setzen
-        scraper.setUserAgent(sig[1])
-        #Scraper starten
-        scraper.startScraper()
+    #Pruefung des Signals
+    if not isinstance(sig, int):
+        continue
+    #Holen eines Arbeitspakets und Vorbereiten des CrawlProzesses in Schleife bis der Verteiler
+    #False als Packet sendet
+    package = get(distributor_ip + path)
+    while package not False:
+        process = CrawlerProcess({'USER_AGENT': package[0], 'LOG_ENABLED': False})
+        process.crawl(so_spider.so_spider, start_urls = package[1])
+        process.start()
+        package = get(distributor_ip + path)
