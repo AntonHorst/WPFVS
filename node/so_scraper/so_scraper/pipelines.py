@@ -1,3 +1,4 @@
+from request import post
 # -*- coding: utf-8 -*-
 
 # Define your item pipelines here
@@ -13,3 +14,15 @@ class SoScraperPipeline(object):
 		with open(filename, 'a') as f:
 			f.write(answers)
 		return item
+
+class ResultPipeline(object):
+    host = '192.168.56.102'
+    path = '/distributor'
+    def process_item(self, item, spider):
+        for tag in item['tags']:
+            numbers = []
+            numbers.append(item['votes'])
+            numbers.append(item['answers'])
+            numbers.append(item['views'])
+            result = {tag: numbers}
+            post(host + path, data = result)
