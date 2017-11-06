@@ -9,9 +9,8 @@ from requests import get
 from scrapy.crawler import CrawlerProcess
 from so_scraper.so_scraper.spiders import so_spider
 
-distributor_ip = "192.168.56.102" #IP des Verteilers
+distributor_ip = "139.6.65.29" #IP des Verteilers
 distributor_port = 45678          #Port des Verteilprozesses
-distibution_port = 45679          #Prot der Rest API
 path = '/distributor'
 
 #Verbindung zum Verteiler aufbauen
