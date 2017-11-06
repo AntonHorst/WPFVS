@@ -280,18 +280,19 @@ if __name__ == '__main__':
 
 def startRoutine(self):
 	print("StartRoutine...")
-	apiPath = 'pip09/node'
-	r = get(apiPath)
-	pageCount = int(r.text)
-	print ("Pagecount erhalten: " + pageCount)
-	#set limit
-	#limit = pageCount
 	#Prepare Socket
 	print("Socket starten")
 	s = socket.socket()
 	port =45678
 	host = socket.gethostname()
 	s.bind((host, port))
+	wait = raw_input("Nodes jetzt manuell starten...")
+	apiPath = 'pip09/node'
+	r = get(apiPath)
+	pageCount = int(r.text)
+	print ("Pagecount erhalten: " + pageCount)
+	#set limit
+	#limit = pageCount
 
 	#Send WakeCall
 	print("Weckruf senden")
