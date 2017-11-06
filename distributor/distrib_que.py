@@ -255,11 +255,7 @@ class Distributor(Resource):
 
 	#Ueberträgt ein Arbetispaket an ein anfragenden Node
 	def get(self):
-		#Ueberprüfung ob noch ein Paket abzuhandeln ist
-		if getnextpackage != False:
-			return getnextpackage()
-		else:
-			return False
+		return getnextpackage()
 	
 	#Empfaengt fuer jeden Tag die Views, Votes und Answers
 	def put(self):
@@ -276,9 +272,10 @@ api.add_resource(Distributor, '/distributor')
 
 if __name__ == '__main__':
 	app.run(debug = True, use_reloader = False)
+	startRoutine()
 
 def startRoutine(self):
-	apiPath = 'pip07/node'
+	apiPath = 'pip09/node'
 	r = get(apiPath)
 	pageCount = int(r.text)
 	#set limit
