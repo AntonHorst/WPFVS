@@ -1,6 +1,7 @@
 from collections import deque, defaultdict
 from flask import Flask
 from flask_restful import reqparse, Api, Resource
+from request import get
 
 #Vorbereitung der Rest Api
 app = Flask(__name__)
@@ -263,3 +264,19 @@ api.add_resource(Distributor, '/distributor')
 
 if __name__ == '__main__':
 	app.run(debug = True, use_reloader = False)
+
+def startRoutine(self):
+	apiPath = 'pip07/node'
+	r = get(apiPath)
+	pageCount = int(r.text)
+	#set limit
+	
+	#Prepare Socket
+	s = socket.socket()
+	port =45678
+	host = socket.gethostname()
+	s.bind((host, port))
+
+	#Send WakeCall
+	s.sendall('1')
+	s.close() 
