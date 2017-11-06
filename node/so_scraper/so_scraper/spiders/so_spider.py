@@ -1,23 +1,23 @@
 import scrapy
-from so_scraper.items import SoScraperItem
+from .. import items 
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import Join
 
 class so_spider(scrapy.Spider):
-	name = "so_questions"
+	name = "so_spider"
 
 	def start_requests(self):
-		urls = [
-			'https://stackoverflow.com/questions?page=2000&sort=newest',
-			'https://stackoverflow.com/questions?page=3000&sort=newest',
-		]
+		#urls = [
+		#	'https://stackoverflow.com/questions?page=2000&sort=newest',
+		#	'https://stackoverflow.com/questions?page=3000&sort=newest',
+		#]
 		for url in urls:
 			yield scrapy.Request(url=url, callback=self.parse)
 
 	def parse(self, response):
 		QUESTION_SELECTOR = '.question-summary'
 		for question in response.css(QUESTION_SELECTOR):
-			l = ItemLoader(item=SoScraperItem(), selector=question)
+			l = ItemLoader(item=items.SoScraperItem(), selector=question)
 			TAG_SELECTOR = '.post-tag ::text'
 			VIEW_SELECTOR = '.views ::text'
 			VOTE_SELECTOR = '.vote-count-post ::text'
