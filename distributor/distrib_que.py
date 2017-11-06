@@ -283,6 +283,7 @@ def startRoutine():
 	wait = input("Nodes jetzt manuell starten...")
 	apiPath = 'http://139.6.65.28:5000/node'
 	r = get(apiPath)
+	print (r)
 	pageCount = int(r.text)
 	print ("Pagecount erhalten: " + pageCount)
 	#set limit
