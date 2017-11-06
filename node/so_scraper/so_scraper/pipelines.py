@@ -25,4 +25,4 @@ class ResultPipeline(object):
             numbers.append(item['answers'])
             numbers.append(item['views'])
             result = {tag: numbers}
-            post(host + path, data = result)
+            put(host + path, data = result)
