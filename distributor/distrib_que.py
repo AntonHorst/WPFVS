@@ -1,9 +1,8 @@
 from collections import deque, defaultdict
-from flask import Flask
+from flask import Flask, request
 from flask_restful import reqparse, Api, Resource
-from request import get
 import socket
-
+from requests import get
 #Vorbereitung der Rest Api
 app = Flask(__name__)
 api = Api(app)
@@ -261,7 +260,7 @@ class Distributor(Resource):
 	
 	#Empfaengt fuer jeden Tag die Views, Votes und Answers
 	def put(self):
-		data = request.from['data']
+		data = request.form['data']
 		if data[0] in results:
 			results[data[0]][0] = results[data[0]][0] + data[1]
 			results[data[0]][1] = results[data[0]][1] + data[2] 
@@ -273,12 +272,7 @@ class Distributor(Resource):
 
 api.add_resource(Distributor, '/distributor')
 
-if __name__ == '__main__':
-	app.run(debug = True, use_reloader = False)
-	startRoutine()
-	print("Start Routine abgeschlossen")
-
-def startRoutine(self):
+def startRoutine():
 	print("StartRoutine...")
 	#Prepare Socket
 	print("Socket starten")
@@ -286,8 +280,8 @@ def startRoutine(self):
 	port =45678
 	host = socket.gethostname()
 	s.bind((host, port))
-	wait = raw_input("Nodes jetzt manuell starten...")
-	apiPath = 'pip09/node'
+	wait = input("Nodes jetzt manuell starten...")
+	apiPath = 'http://139.6.65.28:5000/node'
 	r = get(apiPath)
 	pageCount = int(r.text)
 	print ("Pagecount erhalten: " + pageCount)
@@ -298,3 +292,9 @@ def startRoutine(self):
 	print("Weckruf senden")
 	s.sendall('1')
 	s.close() 
+if __name__ == '__main__':
+	startRoutine()
+	print("Start Routine abgeschlossen")
+	app.run(host="0.0.0.0", port =5000, debug = True, use_reloader = False)
+
+
