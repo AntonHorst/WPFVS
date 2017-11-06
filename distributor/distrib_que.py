@@ -2,6 +2,7 @@ from collections import deque, defaultdict
 from flask import Flask
 from flask_restful import reqparse, Api, Resource
 from request import get
+import socket
 
 #Vorbereitung der Rest Api
 app = Flask(__name__)
@@ -222,25 +223,36 @@ class Distributor(Resource):
 	ua_counter=0
 
 	results = defaultdict(str) #{'tag':[views,answers,votes]}
-
-	#Muss in Funktion getnextpackage umgebaut werden (naechstes Paket adhoc erstellen
-	# um nicht 950.000 Packages im Speicher vorzuhalten)
-	while i <= limit:
-		current_agent = agent[au_counter]
-		packe =['']
-		urls =[]
-		for j in range(i, i+ 50):
-			urls.append('https://stackoverflow.com/questions?page=' + str(j) + '&sort=newest')
-			j = j +1
-			
-		urls.insert(0,current_agent)
 	
-		if ua_counter >= 200:  
-			ua_counter=0
-		else:
-			ua_counter=ua_counter+1
+	#gibt das nachste Arbeitspaket in der Form [UserAgent, [urls]] zurueck und False, falls kein Paket mehr vorhanden ist
+	def getNextPackage(self):
+		if i <= limit:
+			current_agent = agent[au_counter]
+			package =[]
+			urls =[]
 			
-		i=i+50
+			if i+50 < limit:
+				rangelimit = limit - i
+			else:
+				rangelimit = 50
+			for j in range(i, rangelimit):
+				urls.append('https://stackoverflow.com/questions?page=' + str(j) + '&sort=newest')
+				j = j +1
+				
+			package.append(current_agent)
+			package.append(urls)
+		
+			if ua_counter >= len(agent):  
+				ua_counter=0
+			else:
+				ua_counter=ua_counter+1
+				
+			i=i+rangelimit
+			return package
+		else:
+			return False
+	
+
 	#Ueberträgt ein Arbetispaket an ein anfragenden Node
 	def get(self):
 		#Ueberprüfung ob noch ein Paket abzuhandeln ist
