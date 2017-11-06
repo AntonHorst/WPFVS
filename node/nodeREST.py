@@ -22,6 +22,9 @@ class Node(Resource):
 		
 		with open(filename, 'r') as f:
 			count = f.read()
+
+		print ("Anfordern des Pagecounts:" + count)
+
 		return count
 
 api.add_resource(Node, '/node')

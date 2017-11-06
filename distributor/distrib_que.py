@@ -248,8 +248,10 @@ class Distributor(Resource):
 				ua_counter=ua_counter+1
 				
 			i=i+rangelimit
+			print ("Paket vorhanden, wird returned")
 			return package
 		else:
+			print("Kein Paket vorhanden")
 			return False
 	
 
@@ -266,6 +268,7 @@ class Distributor(Resource):
 			results[data[0]][2] = results[data[0]][2] + data[3]
 		else:
 			results[data[0]] = [data[1],data[2], data[3]]
+		print ("Ergebniss gespeichert")
 		return 201
 
 api.add_resource(Distributor, '/distributor')
@@ -273,19 +276,24 @@ api.add_resource(Distributor, '/distributor')
 if __name__ == '__main__':
 	app.run(debug = True, use_reloader = False)
 	startRoutine()
+	print("Start Routine abgeschlossen")
 
 def startRoutine(self):
+	print("StartRoutine...")
 	apiPath = 'pip09/node'
 	r = get(apiPath)
 	pageCount = int(r.text)
+	print ("Pagecount erhalten: " + pageCount)
 	#set limit
-	
+	#limit = pageCount
 	#Prepare Socket
+	print("Socket starten")
 	s = socket.socket()
 	port =45678
 	host = socket.gethostname()
 	s.bind((host, port))
 
 	#Send WakeCall
+	print("Weckruf senden")
 	s.sendall('1')
 	s.close() 

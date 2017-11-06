@@ -21,14 +21,17 @@ s.connect((distributor_ip, distributor_port))
 while True:
     #Empfang des Start Sgnals
     sig = s.recv()
+	print ("Start Signal erhalten:" + sig)
     #Pruefung des Signals
-    if not isinstance(sig, int):
-        continue
+    #if not isinstance(sig, int):
+    #    continue
     #Holen eines Arbeitspakets und Vorbereiten des CrawlProzesses in Schleife bis der Verteiler
     #False als Packet sendet
     package = get(distributor_ip + path)
+	print ("Arbeitspaket erhalten" + package[1][0])
     while package not False:
         process = CrawlerProcess({'USER_AGENT': package[0], 'LOG_ENABLED': False})
         process.crawl(so_spider.so_spider, start_urls = package[1])
         process.start()
+		print("crawl abgeschlossen")
         package = get(distributor_ip + path)
