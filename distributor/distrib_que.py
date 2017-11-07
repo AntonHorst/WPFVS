@@ -1,5 +1,5 @@
 from collections import deque, defaultdict
-from flask import Flask, request
+from flask import Flask, request, abort
 from flask_restful import reqparse, Api, Resource
 import socket
 from requests import get
@@ -229,35 +229,38 @@ class Distributor(Resource):
 			current_agent = self.agent[self.ua_counter]
 			package =[]
 			urls =[]
-			
+			print (self.i)	
 			if self.i+50 < self.limit:
 				rangelimit = 50
 			else:
 				rangelimit = self.limit - self.i
 
-			for j in range(self.i, rangelimit):
+			for j in range(self.i, self.i + rangelimit):
 				urls.append('https://stackoverflow.com/questions?page=' + str(j) + '&sort=newest')
 				j = j +1
 				
 			package.append(current_agent)
 			package.append(urls)
 		
-			if self.ua_counter >= len(self.agent):  
-				self.ua_counter=0
+			if type(self).ua_counter >= len(self.agent):  
+				type(self).ua_counter=0
 			else:
-				self.ua_counter=self.ua_counter+1
+				type(self).ua_counter+=1
 				
-			self.i=self.i+rangelimit
+			type(self).i += rangelimit
 			print ("Paket vorhanden, wird returned")
 			return package
-		else:
+		else:	#wird nicht erreicht, da i niemals groesser als das limit wird
 			print("Kein Paket vorhanden")
 			return False
 	
 
 	#Ueberträgt ein Arbetispaket an ein anfragenden Node
 	def get(self):
-		return {'package': self.getNextPackage()}
+		package = self.getNextPackage()
+		if len(package[1]) == 0:
+			abort(404)
+		return {'package': package}
 	
 	#Empfaengt fuer jeden Tag die Views, Votes und Answers
 	def put(self):

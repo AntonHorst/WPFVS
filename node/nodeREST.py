@@ -25,7 +25,7 @@ class Node(Resource):
 
 		print ("Anfordern des Pagecounts:" + count)
 
-		return count
+		return {'data': count}
 
 api.add_resource(Node, '/node')
 

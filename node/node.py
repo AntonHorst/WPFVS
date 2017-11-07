@@ -7,10 +7,12 @@ import array
 import requests
 from scrapy.crawler import CrawlerProcess
 from so_scraper.so_scraper.spiders import so_spider
+import json
 
 distributor_ip = "139.6.65.29" #IP des Verteilers
 distributor_port = 45678          #Port des Verteilprozesses
 path = '/distributor'
+apiPath = 'http://139.6.65.29:5000/distributor'
 
 #Verbindung zum Verteiler aufbauen
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -26,11 +28,16 @@ while True:
     #    continue
     #Holen eines Arbeitspakets und Vorbereiten des CrawlProzesses in Schleife bis der Verteiler
     #False als Packet sendet
-    package = get(distributor_ip + path)
-    print ("Arbeitspaket erhalten" + package[1][0])
+    resp = get(apiPath)
+    json_acceptable_string = resp.text.replace("'","/")
+    respDict = json.loads(json_acceptable_string)
+    userAgent = respDict['package'][0]
+    urls = respDict['package'][1]
+
+    print ("Arbeitspaket erhalten")
     while not package == False:
-        process = CrawlerProcess({'USER_AGENT': package[0], 'LOG_ENABLED': False})
-        process.crawl(so_spider.so_spider, start_urls = package[1])
+        process = CrawlerProcess({'USER_AGENT': userAgent, 'LOG_ENABLED': False})
+        process.crawl(so_spider.so_spider, start_urls = urls)
         process.start()
         print("crawl abgeschlossen")
-        package = request.get(distributor_ip + path)
+        package = request.get(apiPath)
