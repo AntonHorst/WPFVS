@@ -225,28 +225,29 @@ class Distributor(Resource):
 	
 	#gibt das nachste Arbeitspaket in der Form [UserAgent, [urls]] zurueck und False, falls kein Paket mehr vorhanden ist
 	def getNextPackage(self):
-		if i <= limit:
-			current_agent = agent[au_counter]
+		if self.i <= self.limit:
+			current_agent = self.agent[self.ua_counter]
 			package =[]
 			urls =[]
 			
-			if i+50 < limit:
-				rangelimit = limit - i
-			else:
+			if self.i+50 < self.limit:
 				rangelimit = 50
-			for j in range(i, rangelimit):
+			else:
+				rangelimit = self.limit - self.i
+
+			for j in range(self.i, rangelimit):
 				urls.append('https://stackoverflow.com/questions?page=' + str(j) + '&sort=newest')
 				j = j +1
 				
 			package.append(current_agent)
 			package.append(urls)
 		
-			if ua_counter >= len(agent):  
-				ua_counter=0
+			if self.ua_counter >= len(self.agent):  
+				self.ua_counter=0
 			else:
-				ua_counter=ua_counter+1
+				self.ua_counter=self.ua_counter+1
 				
-			i=i+rangelimit
+			self.i=self.i+rangelimit
 			print ("Paket vorhanden, wird returned")
 			return package
 		else:
@@ -256,7 +257,7 @@ class Distributor(Resource):
 
 	#Ueberträgt ein Arbetispaket an ein anfragenden Node
 	def get(self):
-		return getnextpackage()
+		return {'package': self.getNextPackage()}
 	
 	#Empfaengt fuer jeden Tag die Views, Votes und Answers
 	def put(self):
