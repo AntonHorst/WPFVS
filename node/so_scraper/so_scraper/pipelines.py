@@ -19,9 +19,4 @@ class ResultPipeline(object):
 	apiPath = "http://139.6.65.29:5000/distributor"
     def process_item(self, item, spider):
         for tag in item['tags']:
-            numbers = []
-            numbers.append(item['votes'])
-            numbers.append(item['answers'])
-            numbers.append(item['views'])
-            result = {tag: numbers}
-            put(apiPath, data = result)
+			put(apiPath, data={'tag': tag, 'votes': item['votes'], 'answers': item['answers'], 'views': item['views']}

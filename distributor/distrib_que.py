@@ -263,15 +263,21 @@ class Distributor(Resource):
 		return {'package': package}
 	
 	#Empfaengt fuer jeden Tag die Views, Votes und Answers
+	#Aufruf ueber put(apiPath, data={'tag': tag, 'votes': votes, 'answers': answers, 'views': views})
 	def put(self):
-		data = request.form['data']
-		if data[0] in results:
-			results[data[0]][0] = results[data[0]][0] + data[1]
-			results[data[0]][1] = results[data[0]][1] + data[2] 
-			results[data[0]][2] = results[data[0]][2] + data[3]
+		tag = request.form['tag']
+		votes = int(request.form['votes'])
+		answers = int(request.form['answers'])
+		views = int(request.form['views'])
+		print (tag + " " + str(votes) + " " + str(answers) + " " + str(views))
+		if tag in type(self).results:
+			type(self).results[tag][0] = type(self).results[tag][0] + votes
+			type(self).results[tag][1] = type(self).results[tag][1] + answers 
+			type(self).results[tag][2] = type(self).results[tag][2] + views
 		else:
-			results[data[0]] = [data[1],data[2], data[3]]
+			type(self).results[tag] = [votes, answers, views]
 		print ("Ergebniss gespeichert")
+		print(type(self).results)
 		return 201
 
 api.add_resource(Distributor, '/distributor')
@@ -298,7 +304,7 @@ def startRoutine():
 	s.sendall('1')
 	s.close() 
 if __name__ == '__main__':
-	startRoutine()
+	#startRoutine()
 	print("Start Routine abgeschlossen")
 	app.run(host="0.0.0.0", port =5000, debug = True, use_reloader = False)
 
