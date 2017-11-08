@@ -28,7 +28,7 @@ while True:
     	#Holen eines Arbeitspakets und Vorbereiten des CrawlProzesses in Schleife bis der Verteiler
     	#Keinen 200er HTTP Status mehr sendet
     	resp = get(apiPath)
-    	while package.is_success():
+    	while resp.is_success():
     		print ("Arbeitspaket erhalten")
     		json_acceptable_string = resp.text.replace("'","/")
     		respDict = json.loads(json_acceptable_string)
@@ -38,4 +38,4 @@ while True:
     	    process.crawl(so_spider.so_spider, start_urls = urls)
     	    process.start()
     	    print("crawl abgeschlossen")
-    	    package = request.get(apiPath)
+    	    resp = get(apiPath)

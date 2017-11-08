@@ -289,19 +289,19 @@ def startRoutine():
 	s = socket.socket()
 	port =45678
 	host = socket.gethostname()
-	s.bind((host, port))
+	s.bind(('139.6.65.29', port))
 	wait = input("Nodes jetzt manuell starten...")
 	apiPath = 'http://139.6.65.28:5000/node'
 	r = get(apiPath)
 	print (r)
-	pageCount = int(r.text)
-	print ("Pagecount erhalten: " + pageCount)
+	#pageCount = int(r.text)
+	#print ("Pagecount erhalten: " + pageCount)
 	#set limit
 	#limit = pageCount
 
 	#Send WakeCall
 	print("Weckruf senden")
-	s.sendall('1')
+	s.sendall('1'.encode('utf-8'))
 	s.close() 
 if __name__ == '__main__':
 	startRoutine()
