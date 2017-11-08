@@ -304,7 +304,7 @@ def startRoutine():
 	s.sendall('1')
 	s.close() 
 if __name__ == '__main__':
-	#startRoutine()
+	startRoutine()
 	print("Start Routine abgeschlossen")
 	app.run(host="0.0.0.0", port =5000, debug = True, use_reloader = False)
 
