@@ -286,10 +286,10 @@ def startRoutine():
 	print("StartRoutine...")
 	#Prepare Socket
 	print("Socket starten")
-	s = socket.socket()
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	port =45678
 	host = socket.gethostname()
-	s.bind(('139.6.65.29', port))
+	s.bind(('', port))
 	wait = input("Nodes jetzt manuell starten...")
 	apiPath = 'http://139.6.65.28:5000/node'
 	r = get(apiPath)
