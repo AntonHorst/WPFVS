@@ -20,22 +20,22 @@ s.connect((distributor_ip, distributor_port))
 
 #Schleife 
 while True:
-    #Empfang des Start Sgnals
+	#Empfang des Start Sgnals
 	sig = -1
-    sig = s.recv()
-	if sig == 1:
-    	print ("Start Signal erhalten:" + sig)
-    	#Holen eines Arbeitspakets und Vorbereiten des CrawlProzesses in Schleife bis der Verteiler
-    	#Keinen 200er HTTP Status mehr sendet
-    	resp = get(apiPath)
-    	while package.is_success():
-    		print ("Arbeitspaket erhalten")
-    		json_acceptable_string = resp.text.replace("'","/")
-    		respDict = json.loads(json_acceptable_string)
-    		userAgent = respDict['package'][0]
-    		urls = respDict['package'][1]
-    	    process = CrawlerProcess({'USER_AGENT': userAgent, 'LOG_ENABLED': False})
-    	    process.crawl(so_spider.so_spider, start_urls = urls)
-    	    process.start()
-    	    print("crawl abgeschlossen")
-    	    package = request.get(apiPath)
+	sig = s.recv()
+	if sig == '1':
+		print ("Start Signal erhalten:" + sig)
+		#Holen eines Arbeitspakets und Vorbereiten des CrawlProzesses in Schleife bis der Verteiler
+		#Keinen 200er HTTP Status mehr sendet
+		resp = get(apiPath)
+		while resp.is_success():
+			print ("Arbeitspaket erhalten")
+			json_acceptable_string = resp.text.replace("'","/")
+			respDict = json.loads(json_acceptable_string)
+			userAgent = respDict['package'][0]
+			urls = respDict['package'][1]
+			process = CrawlerProcess({'USER_AGENT': userAgent, 'LOG_ENABLED': False})
+			process.crawl(so_spider.so_spider, start_urls = urls)
+			process.start()
+			print("crawl abgeschlossen")
+			package = request.get(apiPath)
