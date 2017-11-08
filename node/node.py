@@ -38,4 +38,4 @@ while True:
 			process.crawl(so_spider.so_spider, start_urls = urls)
 			process.start()
 			print("crawl abgeschlossen")
-			package = request.get(apiPath)
+			resp = request.get(apiPath)
