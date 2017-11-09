@@ -5,9 +5,11 @@ import signal
 import re
 import array
 from requests import get
-from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerRunner
 from so_scraper.so_scraper.spiders import so_spider
+from twisted.internet import reactor
 import json
+import time
 
 distributor_ip = "139.6.65.29" #IP des Verteilers
 distributor_port = 31337          #Port des Verteilprozesses
@@ -23,8 +25,12 @@ while retry:
 		print ("Verbindungsaufbau Fehlgeschlagen")
 		time.sleep(10)
 		continue
+	finally:
+		print("Entered Finally")
+		retry = False
 ping = s.recv(1024)
-if ping == 'OK':
+print (str(ping))
+if str(ping) == "b'OK'":
 	print("OK erhalten")
 else:
 	print("Abbruch: Fehlerhaftes Signal erhalten")
@@ -42,15 +48,17 @@ while True:
 		print("Distributor REST API noch nicht bereit, schlafen fuer 10 Sekunden")
 		time.sleep(10)
 		continue
-	if resp.is_success():
+	if not resp.status_code == 404 :
 		print ("Arbeitspaket erhalten")
 		json_acceptable_string = resp.text.replace("'","/")
 		respDict = json.loads(json_acceptable_string)
 		userAgent = respDict['package'][0]
 		urls = respDict['package'][1]
-		process = CrawlerProcess({'USER_AGENT': userAgent, 'LOG_ENABLED': False})
-		process.crawl(so_spider.so_spider, start_urls = urls)
-		process.start()
+		runner = CrawlerRunner({'USER_AGENT': userAgent, 'LOG_ENABLED': False})
+		d = runner.crawl(so_spider.so_spider, start_urls = urls)
+		#d.addBoth(lambda _: reactor.stop())
+		reactor.run()	
+
 		print("crawl abgeschlossen")
 	else:
 		print("Kein weiteres Arbeitspaket vorhanden")

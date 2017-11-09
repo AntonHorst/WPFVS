@@ -3,8 +3,10 @@ from flask import Flask, request, abort
 from flask_restful import reqparse, Api, Resource
 import socket
 from requests import get
-from serv import startServ
+from serv import Server
 import threading
+import time
+import json
 #Vorbereitung der Rest Api
 app = Flask(__name__)
 api = Api(app)
@@ -289,11 +291,14 @@ def startRoutine():
 
 	#Socket ueber einen Thread im Hintergrund starten(bleibt bis zum Schluss geoeffnet)
 	print("Socket starten")
-	socketThread = threading.Thread(target=startServ())
+	server = Server()
+	socketThread = threading.Thread(target=server.startServ)
+	socketThread.setDaemon(True)
 	socketThread.start()
 
 	#Verbindung mit NodeREST aufbauen und Pagecount erhalten
-	apiPath = 'http://139.6.65.28:5000/node'
+	print("Versuche pagecount zu erhalten")
+	apiPath = 'http://139.6.65.29:5000/node'
 	retry = True
 	while retry:
 		try:
@@ -302,10 +307,15 @@ def startRoutine():
 			print("Node Rest nicht erreicht")
 			time.sleep(10)
 			continue
-		finally:
-			retry = False
-	print (r)
-	pageCount = int(r.form['data']) 
+		retry = False
+
+	#Pagecount aus der Antwort extrahieren
+	json_accebtable_string = r.text.replace("'","/")
+	rDict = json.loads(json_accebtable_string)
+	pageCount = rDict['data']
+	
+	#print (r)
+	#pageCount = int(r.text) 
 	print ("Pagecount erhalten: " + pageCount)
 	#set limit
 	#limit = pageCount

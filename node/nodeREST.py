@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import reqparse, Api, Resource
-from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerRunner
+from twisted.internet import reactor
 from so_scraper.so_scraper.spiders import PageCountSpider
 
 app = Flask(__name__)
@@ -15,9 +16,10 @@ der Verteiler die Gesamtanzahl der Seiten abrufen kann
 """
 class Node(Resource):
 	def get(self):
-		process = CrawlerProcess({'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT %.1)','LOG_ENABLED': False})
-		process.crawl(PageCountSpider.PageCountSpider)
-		process.start()
+		runner = CrawlerRunner({'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT %.1)','LOG_ENABLED': False})
+		d = runner.crawl(PageCountSpider.PageCountSpider)
+		#d.addBoth(lambda _: reactor.stop())
+		reactor.run()
 		filename = 'count.txt'
 		
 		with open(filename, 'r') as f:
