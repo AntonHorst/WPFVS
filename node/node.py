@@ -11,7 +11,7 @@ import json
 
 distributor_ip = "139.6.65.29" #IP des Verteilers
 distributor_port = 31337          #Port des Verteilprozesses
-apiPath = 'http://139.6.65.29:5000/distributor'
+apiPath = 'http://139.6.65.29:45678/distributor'
 
 #Verbindung zum Verteiler aufbauen
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -305,14 +305,14 @@ def startRoutine():
 		finally:
 			retry = False
 	print (r)
-	#pageCount = int(r.text)
-	#print ("Pagecount erhalten: " + pageCount)
+	pageCount = int(r.form['data']) 
+	print ("Pagecount erhalten: " + pageCount)
 	#set limit
 	#limit = pageCount
 
 if __name__ == '__main__':
 	startRoutine()
 	print("Start Routine abgeschlossen")
-	app.run(host="0.0.0.0", port =5000, debug = True, use_reloader = False)
+	app.run(host="0.0.0.0", port =45678, debug = True, use_reloader = False)
 
 
