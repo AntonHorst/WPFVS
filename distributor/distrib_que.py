@@ -3,6 +3,8 @@ from flask import Flask, request, abort
 from flask_restful import reqparse, Api, Resource
 import socket
 from requests import get
+from serv import startServ
+import threading
 #Vorbereitung der Rest Api
 app = Flask(__name__)
 api = Api(app)
@@ -284,25 +286,30 @@ api.add_resource(Distributor, '/distributor')
 
 def startRoutine():
 	print("StartRoutine...")
-	#Prepare Socket
+
+	#Socket ueber einen Thread im Hintergrund starten(bleibt bis zum Schluss geoeffnet)
 	print("Socket starten")
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	port =45678
-	host = socket.gethostname()
-	s.bind(('', port))
-	wait = input("Nodes jetzt manuell starten...")
+	socketThread = threading.Thread(target=startServ())
+	socketThread.start()
+
+	#Verbindung mit NodeREST aufbauen und Pagecount erhalten
 	apiPath = 'http://139.6.65.28:5000/node'
-	r = get(apiPath)
+	retry = True
+	while retry:
+		try:
+			r = get(apiPath)
+		except:
+			print("Node Rest nicht erreicht")
+			time.sleep(10)
+			continue
+		finally:
+			retry = False
 	print (r)
 	#pageCount = int(r.text)
 	#print ("Pagecount erhalten: " + pageCount)
 	#set limit
 	#limit = pageCount
 
-	#Send WakeCall
-	print("Weckruf senden")
-	s.sendall('1'.encode('utf-8'))
-	s.close() 
 if __name__ == '__main__':
 	startRoutine()
 	print("Start Routine abgeschlossen")
