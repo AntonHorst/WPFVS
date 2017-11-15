@@ -12,12 +12,12 @@ class UrlCrawlerScript(Process):
 		Process.__init__(self)
 		#settings = get_project_settings()
 		#settings['USER_AGENT': userAgent]
-		BSettings = BaseSettings()
-		BSettings.set('USER_AGENT', userAgent, 30)
-		BSettings.set('LOG_ENABLED', False, 30)
-		self.crawler = CrawlerProcess(spider)
-		self.crawler.configure()
-		self.crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
+		#BSettings = BaseSettings()
+		#BSettings.set('USER_AGENT', userAgent, 30)
+		#BSettings.set('LOG_ENABLED', False, 30)
+		self.crawler = CrawlerProcess({'USER_AGENT': userAgent, 'LOG_ENABLED': False})
+		#self.crawler.configure()
+		#self.crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
 		self.spider = spider
 
 	def run(self):
