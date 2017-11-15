@@ -10,10 +10,18 @@ from so_scraper.so_scraper.spiders import so_spider
 from twisted.internet import reactor
 import json
 import time
+from UrlCrawlerScript import UrlCrawlerScript
 
 distributor_ip = "139.6.65.29" #IP des Verteilers
 distributor_port = 31337          #Port des Verteilprozesses
 apiPath = 'http://139.6.65.29:45678/distributor'
+
+#Funtion die den spider Durchlauf startet
+def run_spider(urls, userAgent):
+	spider = so_spider(start_urls= urls)
+	crawler = UrlCrawlerScript(spider, userAgent)
+	crawler.start()
+	crawler.join()
 
 #Verbindung zum Verteiler aufbauen
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -54,10 +62,14 @@ while True:
 		respDict = json.loads(json_acceptable_string)
 		userAgent = respDict['package'][0]
 		urls = respDict['package'][1]
-		runner = CrawlerRunner({'USER_AGENT': userAgent, 'LOG_ENABLED': False})
-		d = runner.crawl(so_spider.so_spider, start_urls = urls)
+
+		runspider(urls, userAgent)
+
+		#Alter weg den Scraper zu starten
+		#runner = CrawlerRunner({'USER_AGENT': userAgent, 'LOG_ENABLED': False})
+		#d = runner.crawl(so_spider.so_spider, start_urls = urls)
 		#d.addBoth(lambda _: reactor.stop())
-		reactor.run()	
+		#reactor.run()	
 
 		print("crawl abgeschlossen")
 	else:
