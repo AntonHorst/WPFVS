@@ -23,8 +23,8 @@ class Node(Resource):
 		userAgent = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT %.1)'
 		spider = PageCountSpider.PageCountSpider()
 		crawler = UrlCrawlerScript(spider, userAgent)
-		crawler.start()
-		crawler.join()		
+		crawler.run()
+		#crawler.join()		
 
 		filename = 'count.txt'
 		
