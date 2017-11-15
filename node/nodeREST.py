@@ -20,9 +20,9 @@ class Node(Resource):
 		#d = runner.crawl(PageCountSpider.PageCountSpider)
 		##d.addBoth(lambda _: reactor.stop())
 		#reactor.run()
-
-		spider = PageCountSpider()
-		crawler = UrlCrawlerScript(spider)
+		userAgent = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT %.1)'
+		spider = PageCountSpider.PageCountSpider()
+		crawler = UrlCrawlerScript(spider, userAgent)
 		crawler.start()
 		crawler.join()		
 
