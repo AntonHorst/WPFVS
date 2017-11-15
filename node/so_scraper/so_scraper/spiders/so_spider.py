@@ -21,8 +21,11 @@ class so_spider(scrapy.Spider):
 			TAG_SELECTOR = '.post-tag ::text'
 			VIEW_SELECTOR = '.views ::text'
 			VOTE_SELECTOR = '.vote-count-post ::text'
-			ANSWER_SELECTOR = '.status ::text'
-			UNANSWERED_SELECTOR = '.status unanswered ::text'
+			IF '.status answered ::true':
+				ANSWER_SELECTOR = '.status answered  ::text'
+			ELSE:
+				ANSWER_SELECTOR = '0'
+			#UNANSWERED_SELECTOR = '.status unanswered ::text'
 			answers = question.css('.status')
 			l.add_css('tags', TAG_SELECTOR)
 			#l.add_value('tagAmount', len(question.css(TAG_SELECTOR)))
