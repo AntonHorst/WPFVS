@@ -23,7 +23,7 @@ class so_spider(scrapy.Spider):
 			VOTE_SELECTOR = '.vote-count-post ::text'
 			try:
 				ANSWER_SELECTOR = '.status answered  ::text'
-			except answerError:
+			except ValueError:
 				ANSWER_SELECTOR = '0'
 			#UNANSWERED_SELECTOR = '.status unanswered ::text'
 			#answers = question.css('.status')
