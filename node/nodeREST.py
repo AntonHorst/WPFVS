@@ -22,8 +22,8 @@ class Node(Resource):
 		#reactor.run()
 		userAgent = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT %.1)'
 		spider = PageCountSpider.PageCountSpider()
-		crawler = UrlCrawlerScript(spider, userAgent)
-		crawler.run()
+		crawler = UrlCrawlerScript(spider)
+		crawler.run(userAgent)
 		#crawler.join()		
 
 		filename = 'count.txt'

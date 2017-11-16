@@ -7,9 +7,10 @@ from scrapy.utils.project import get_project_settings
 from scrapy.settings import Settings
 from threading import Thread
 from scrapy.crawler import signals
+import os
 
 #Diese Klasse bereitet einen Twisted Reactor vor, der mittels Process geforked wird und somit mehrfach ausgefuehrt werden kann
-class UrlCrawlerScript(Process):
+class UrlCrawlerScriptold(Process):
 	def __init__(self, spider, userAgent):
 		Process.__init__(self)
 		#settings = {'USER_AGENT': userAgent, 'LOG_ENABLED': False}
@@ -30,3 +31,27 @@ class UrlCrawlerScript(Process):
 		#process = CrawlerProcess({'USER_AGENT': self.userAgent, 'LOG_ENABLED': False})
 		#process.crawl(self.spider)
 		#Thread(target=process.start).start()
+
+class UrlCrawlerScript():
+	def __init__(self, spider):
+		print("CrawlerObjekt erstellen")
+		self.BSettings = Settings()
+		self.BSettings.set('LOG_ENABLED', False, 30)
+		#BSettings.set('USER_AGENT', userAgent, 30)
+		#self.crawler = Crawler(spider, self.BSettings)
+		#self.crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
+		self.spider = spider
+
+	def run(self, userAgent):
+		print("Child Process erstellen")
+		newPid = os.fork()
+		if newPid == 0:
+			print("entered Child")
+			self.BSettings.set('USER_AGENT', userAgent, 30)
+			crawler = Crawler(self.spider, self.BSettings)
+			crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
+			crawler.crawl(self.spider)
+			reactor.run()
+			os._exit(0)
+		else:
+			os.wait()
