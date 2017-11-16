@@ -31,7 +31,7 @@ class SoScraperItem(scrapy.Item):
 	tags = scrapy.Field()
 	votes = scrapy.Field()
 	answers = scrapy.Field(
-		#input_processor=MapCompose(parseList)
+		input_processor=MapCompose(parseInt),
 	)
 	#Aufruf der parseViews Methode beim fuellen des Fields über einen Loader
 	views = scrapy.Field(
