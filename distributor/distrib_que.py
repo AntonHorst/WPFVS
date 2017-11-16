@@ -263,6 +263,7 @@ class Distributor(Resource):
 	def get(self):
 		package = self.getNextPackage()
 		if len(package[1]) == 0:
+			print("QUE: INHALT DES ARBEITSPAKETS LEER: SENDE 404")
 			abort(404)
 		return {'package': package}
 	
@@ -298,7 +299,7 @@ def startRoutine():
 
 	#Verbindung mit NodeREST aufbauen und Pagecount erhalten
 	print("Versuche pagecount zu erhalten")
-	apiPath = 'http://139.6.65.29:5000/node'
+	apiPath = 'http://localhost:5000/node'
 	retry = True
 	while retry:
 		try:

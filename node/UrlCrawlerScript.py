@@ -55,3 +55,21 @@ class UrlCrawlerScript():
 			os._exit(0)
 		else:
 			os.wait()
+
+	def runSoSpider(self, userAgent, urls):
+		print ("Child Prozess erstellen")
+		newPid = os.fork()
+		if newPid == 0:
+			print("Child Prozess erstellt")
+			self.BSettings.set('USER_AGENT', userAgent, 30)
+			self.BSettings.set('ITE_PIPELINES', 'so_scraper.pipelines.ResultPipeline', 30)
+			self.spider.start_urls = urls
+			crawler = Crawler(self.spider, self.BSettings)
+			crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
+			crawler.crawl(self.spider)
+			reactor.run()
+			os._exit(0)
+		else:
+			os.wait()
+
+
