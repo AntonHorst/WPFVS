@@ -1,6 +1,6 @@
 from scrapy.crawler import Crawler
-from scrapy.conf import settings
-from scrapy import log 
+#from scrapy.conf import settings
+#from scrapy import log 
 from twisted.internet import reactor
 from billiard import Process
 from scrapy.utils.project import get_project_settings
@@ -36,13 +36,13 @@ class UrlCrawlerScript():
 	def __init__(self, spider):
 		print("CrawlerObjekt erstellen")
 		self.BSettings = Settings()
-		self.BSettings.set('LOG_ENABLED', False, 30)
+		#self.BSettings.set('LOG_ENABLED', False, 30)
 		#BSettings.set('USER_AGENT', userAgent, 30)
 		#self.crawler = Crawler(spider, self.BSettings)
 		#self.crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
-		self.spider = spider
+		#self.spider = spider
 
-	def run(self, userAgent):
+	def run(self, spider, userAgent):
 		print("Child Process erstellen")
 		newPid = os.fork()
 		if newPid == 0:
@@ -56,18 +56,20 @@ class UrlCrawlerScript():
 		else:
 			os.wait()
 
-	def runSoSpider(self, userAgent, urls):
+	def runSoSpider(self, spider, userAgent, urls):
 		print ("Child Prozess erstellen")
 		newPid = os.fork()
 		if newPid == 0:
 			print("Child Prozess erstellt")
+			sospider = spider(start_urls = urls)
 			self.BSettings.set('USER_AGENT', userAgent, 30)
-			self.BSettings.set('ITE_PIPELINES', 'so_scraper.pipelines.ResultPipeline', 30)
 			self.spider.start_urls = urls
 			crawler = Crawler(self.spider, self.BSettings)
 			crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
-			crawler.crawl(self.spider)
+			defer = crawler.crawl(self.spider)
+			print("Fehlersuche")
 			reactor.run()
+			print("reactor.run ausgefuehrt")
 			os._exit(0)
 		else:
 			os.wait()

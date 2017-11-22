@@ -4,17 +4,23 @@ from scrapy.loader import ItemLoader
 from scrapy.loader.processors import Join
 
 class so_spider(scrapy.Spider):
+	print("###########Start Spider###########")
 	name = "so_spider"
-
+	#start_urls = ['https://stackoverflow.com/questions?page=2000&sort=newest', 'https://stackoverflow.com/questions?page=3000&sort=newest']
+	#custom_settings = {'ITEM_PIPELINES': {'so_scraper.pipelines.ResultPipeline': 300}}
 	def start_requests(self):
+		print("###########Start Requests############")
+		print(self.start_urls)
 		#urls = [
 		#	'https://stackoverflow.com/questions?page=2000&sort=newest',
 		#	'https://stackoverflow.com/questions?page=3000&sort=newest',
 		#]
-		for url in urls:
-			yield scrapy.Request(url=url, callback=self.parse)
+		for link in self.start_urls:
+			print("########Verarbeite: " + link + "########")
+			yield scrapy.Request(url=link, callback=self.parse)
 
 	def parse(self, response):
+		print("##########entered Parse##########")
 		QUESTION_SELECTOR = '.question-summary'
 		for question in response.css(QUESTION_SELECTOR):
 			l = ItemLoader(item=items.SoScraperItem(), selector=question)

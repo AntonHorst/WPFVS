@@ -270,6 +270,7 @@ class Distributor(Resource):
 	#Empfaengt fuer jeden Tag die Views, Votes und Answers
 	#Aufruf ueber put(apiPath, data={'tag': tag, 'votes': votes, 'answers': answers, 'views': views})
 	def put(self):
+		print('REST: put request erhalten')
 		tag = request.form['tag']
 		votes = int(request.form['votes'])
 		answers = int(request.form['answers'])

@@ -67,7 +67,7 @@ while True:
 		respDict = json.loads(json_acceptable_string)
 		userAgent = respDict['package'][0]
 		urls = respDict['package'][1]
-		
+		print("Rufe Spider mit UA:" + userAgent + "auf")
 		#Start des crawl Prozesses
 		crawler.runSoSpider(userAgent, urls)
 
