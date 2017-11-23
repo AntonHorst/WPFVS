@@ -37,6 +37,7 @@ class UrlCrawlerScript():
 		print("CrawlerObjekt erstellen")
 		self.BSettings = Settings()
 		self.BSettings.set('LOG_ENABLED', False, 30)
+		self.BSettings.set('COOKIES_ENABLED', False, 30)
 		#BSettings.set('USER_AGENT', userAgent, 30)
 		#self.crawler = Crawler(spider, self.BSettings)
 		#self.crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
@@ -64,6 +65,12 @@ class UrlCrawlerScript():
 			self.BSettings.set('USER_AGENT', userAgent, 30)
 			#self.BSettings.set('ITEM_PIPELINES', {'so_scraper.pipelines.ResultPipeline': 300}, 30)
 			#self.spider.start_urls = urls
+			#URLS in Datei schreiben, um sie in der Spider einzulesen
+			f = open('/Users/webcrawler/Projects/WPFVS/node/so_scraper/so_scraper/spiders/urls.txt', 'w')
+			for url in urls:
+				print (url)
+				f.write("%s\n" %url)
+			f.close()
 			crawler = Crawler(self.spider, self.BSettings)
 			crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
 			crawler.crawl(self.spider)

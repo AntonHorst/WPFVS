@@ -264,6 +264,7 @@ class Distributor(Resource):
 		package = self.getNextPackage()
 		if len(package[1]) == 0:
 			print("QUE: INHALT DES ARBEITSPAKETS LEER: SENDE 404")
+			print(type(self).results)
 			abort(404)
 		return {'package': package}
 	
@@ -283,7 +284,7 @@ class Distributor(Resource):
 		else:
 			type(self).results[tag] = [votes, answers, views]
 		print ("Ergebniss gespeichert")
-		print(type(self).results)
+		#print(type(self).results)
 		return 201
 
 api.add_resource(Distributor, '/distributor')
