@@ -222,7 +222,7 @@ class Distributor(Resource):
 	]
 
 	i=0
-	limit =200
+	limit =2000
 	ua_counter=0
 
 	results = defaultdict(str) #{'tag':[views,answers,votes]}
