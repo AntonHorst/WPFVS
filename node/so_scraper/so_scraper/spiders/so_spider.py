@@ -6,7 +6,7 @@ from scrapy.loader.processors import Join
 class so_spider(scrapy.Spider):
 	print("###########Start Spider###########")
 	name = "so_spider"
-	#start_urls = ['https://stackoverflow.com/questions?page=2000&sort=newest', 'https://stackoverflow.com/questions?page=3000&sort=newest']
+	start_urls = ['https://stackoverflow.com/questions?page=2000&sort=newest', 'https://stackoverflow.com/questions?page=3000&sort=newest']
 	#custom_settings = {'ITEM_PIPELINES': {'so_scraper.pipelines.ResultPipeline': 300}}
 	def start_requests(self):
 		print("###########Start Requests############")
