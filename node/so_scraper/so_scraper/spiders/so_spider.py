@@ -6,15 +6,19 @@ from scrapy.loader.processors import Join
 class so_spider(scrapy.Spider):
 	print("###########Start Spider###########")
 	name = "so_spider"
-	start_urls = ['https://stackoverflow.com/questions?page=2000&sort=newest', 'https://stackoverflow.com/questions?page=3000&sort=newest']
-	#custom_settings = {'ITEM_PIPELINES': {'so_scraper.pipelines.ResultPipeline': 300}}
+	#start_urls = ['https://stackoverflow.com/questions?page=2000&sort=newest', 'https://stackoverflow.com/questions?page=3000&sort=newest']
+	custom_settings = {
+		'ITEM_PIPELINES': {'so_scraper.so_scraper.pipelines.ResultPipeline': 300}
+	}
 	def start_requests(self):
 		print("###########Start Requests############")
-		print(self.start_urls)
 		#urls = [
 		#	'https://stackoverflow.com/questions?page=2000&sort=newest',
 		#	'https://stackoverflow.com/questions?page=3000&sort=newest',
 		#]
+		with open("/Users/webcrawler/Projects/WPFVS/node/so_scraper/so_scraper/spiders/urls.txt", "rt") as f:
+			self.start_urls = [url.strip() for url in f.readlines()]
+		print(self.start_urls)
 		for link in self.start_urls:
 			print("########Verarbeite: " + link + "########")
 			yield scrapy.Request(url=link, callback=self.parse)

@@ -62,7 +62,8 @@ class UrlCrawlerScript():
 		if newPid == 0:
 			print("Child Prozess erstellt")
 			self.BSettings.set('USER_AGENT', userAgent, 30)
-			self.spider.start_urls = urls
+			#self.BSettings.set('ITEM_PIPELINES', {'so_scraper.pipelines.ResultPipeline': 300}, 30)
+			#self.spider.start_urls = urls
 			crawler = Crawler(self.spider, self.BSettings)
 			crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
 			crawler.crawl(self.spider)
