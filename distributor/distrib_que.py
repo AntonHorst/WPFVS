@@ -1,3 +1,5 @@
+import sys
+import getopt
 from collections import deque, defaultdict
 from flask import Flask, request, abort
 from flask_restful import reqparse, Api, Resource
@@ -11,22 +13,16 @@ import json
 app = Flask(__name__)
 api = Api(app)
 
-
 class Distributor(Resource):
-
-	que = deque() 
-
-
-	#Package
+	limit = 2000
 	with open("/Users/webcrawler/Projects/WPFVS/distributor/useragent.txt", "rt") as f:
 		agent = [userAgent.strip() for userAgent in f.readlines()]
-	print(agent)
 	i=0
-	limit =2000
 	ua_counter=0
 
 	results = defaultdict(str) #{'tag':[views,answers,votes]}
-	
+
+
 	#gibt das nachste Arbeitspaket in der Form [UserAgent, [urls]] zurueck und False, falls kein Paket mehr vorhanden ist
 	def getNextPackage(self):
 		if self.i <= self.limit:
@@ -87,9 +83,28 @@ class Distributor(Resource):
 		#print(type(self).results)
 		return 201
 
-api.add_resource(Distributor, '/distributor')
 
-def startRoutine():
+	
+def main(argv):
+	try:
+		opts, args = getopt.getopt(argv, 'hn:p:a:', ['node=', 'port=', 'apipath=', 'help'])
+	except getopt.Getopt.Error:
+		print(helpstring)
+		sys.exit(2)
+	for opt, arg in opts:
+		if opt in  ['-h', '--help']:
+			print(helpstring)
+			sys.exit(2)
+		if opt in ['-n', '--node']:
+			node_ip = str(arg)
+		if opt in ['-p','--port']:
+			node_port = arg
+		if opt in ['-a','--api']:
+			node_apiPath = arg
+	apiPath = 'http://' + node_ip + ':' + str(node_port) + '/' + node_apiPath
+	print (apiPath)
+	
+#def startRoutine():
 	print("StartRoutine...")
 
 	#Socket ueber einen Thread im Hintergrund starten(bleibt bis zum Schluss geoeffnet)
@@ -101,10 +116,11 @@ def startRoutine():
 
 	#Verbindung mit NodeREST aufbauen und Pagecount erhalten
 	print("Versuche pagecount zu erhalten")
-	apiPath = 'http://localhost:5000/node'
+	#apiPath = 'http://localhost:5000/node'
 	retry = True
 	while retry:
 		try:
+			print(apiPath)
 			r = get(apiPath)
 		except:
 			print("Node Rest nicht erreicht")
@@ -121,10 +137,16 @@ def startRoutine():
 	#pageCount = int(r.text) 
 	print ("Pagecount erhalten: " + pageCount)
 	#set limit
-	#limit = pageCount
-
+	limit = 2000
+	api.add_resource(Distributor, '/distributor')
 if __name__ == '__main__':
-	startRoutine()
+	node_ip = ''
+	node_port = 5000
+	node_apiPath = 'node'
+	apiPath = 'test'
+	helpstring ="python distrib_que.py -n Node IP -p node Port -a Api_Path_Node"
+	main(sys.argv[1:])
+	#startRoutine()
 	print("Start Routine abgeschlossen")
 	app.run(host="0.0.0.0", port =45678, debug = True, use_reloader = False)
 
