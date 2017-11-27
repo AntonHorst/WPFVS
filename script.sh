@@ -18,6 +18,9 @@ then echo 'Installiere Homebrew...'
 fi 
 sleep 3
 
+sudo chown -R $(whoami) /usr/local/var/homebrew
+sudo chown -R $USER:admin /usr/local
+
 echo 'Installiere Git...'
 brew install git
 
@@ -30,9 +33,13 @@ echo 'Installiere Python3...'
 sleep 3
 
 brew install python3
+brew upgrade python3
 
 echo 'erstelle Projects'
-mkdir ~/Projects
+if [ ! -d "~/Projects" ];
+then  mkdir ~/Projects 
+fi
+
 cd ~/Projects
 
 echo 'erstelle virtuelle Umgebung'
