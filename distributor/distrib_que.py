@@ -19,8 +19,8 @@ class Distributor(Resource):
 
 	#Package
 	with open("/Users/webcrawler/Projects/WPFVS/distributor/useragent.txt", "rt") as f:
-		useragent = [agent.strip() for agent in f.readlines()]
-	print(useragent)
+		agent = [userAgent.strip() for userAgent in f.readlines()]
+	print(agent)
 	i=0
 	limit =2000
 	ua_counter=0

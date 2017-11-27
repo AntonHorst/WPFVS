@@ -14,19 +14,19 @@ from UrlCrawlerScript import UrlCrawlerScript
 import getopt
 
 
-distributor_ip = "127.0.0.1" #IP des Verteilers
-distributor_port = 31337          #Port des Verteilprozesses
-apiPath = 'http://localhost:45678/distributor'
+#distributor_ip = "127.0.0.1" #IP des Verteilers
+#distributor_port = 31337          #Port des Verteilprozesses
+#apiPath = 'http://localhost:45678/distributor'
 
 def main(argv):
 	distributor_ip = ''
 	distributor_port = 0
-	api_port = 0
+	api_port = 45678
 	api_path = 'distributor'
 	helpstring = "node.py -d Distributor_IP -p Distributor_Port -a APIPort (-A APIPath)"
 	try:
-		opts, args = getopt.getopt(argv, "hd:p:a:A:", ["help", "distributorip=", "distributorport=", "apiport=", "apipath"]
-	except:
+		opts, args = getopt.getopt(argv, "hd:p:a:A:", ["help", "distributorip=", "distributorport=", "apiport=", "apipath"])
+	except getopt.GetoptError:
 		print(helpstring)
 		sys.exit(2)
 	for opt,arg in opts:
@@ -36,12 +36,13 @@ def main(argv):
 		elif opt in ('-d', '--distributorip'):
 			distributor_ip = arg
 		elif opt in ('-p', '--distributorport'):
-			distributor_port = arg
+			distributor_port = int(arg)
 		elif opt in ('-A', '--apiPath'):
 			api_path = arg
 		elif opt in ('-a', '--apiport'):
 			api_port = arg
-			apiPath = 'http://'+ distributor_ip + ':' + distributor_port + '/' + api_path
+			apiPath = 'http://'+ distributor_ip + ':' + str(api_port) + '/' + api_path
+			print(apiPath)
 		
 	#Verbindung zum Verteiler aufbauen
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -93,5 +94,5 @@ def main(argv):
 			print("Kein weiteres Arbeitspaket vorhanden")
 			sys.exit() #Etwas rabiat falls ein sonstiger Fehler auftaucht
 
-if name == "__main__":
+if __name__ == "__main__":
 	main(sys.argv[1:])
