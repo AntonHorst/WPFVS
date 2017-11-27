@@ -20,10 +20,10 @@ import getopt
 
 def main(argv):
 	distributor_ip = ''
-	distributor_port = 0
+	distributor_port = 31337
 	api_port = 45678
 	api_path = 'distributor'
-	helpstring = "node.py -d Distributor_IP -p Distributor_Port -a APIPort (-A APIPath)"
+	helpstring = "node.py -d Distributor_IP (-p Distributor_Port -a APIPort -A APIPath)"
 	try:
 		opts, args = getopt.getopt(argv, "hd:p:a:A:", ["help", "distributorip=", "distributorport=", "apiport=", "apipath"])
 	except getopt.GetoptError:
@@ -41,9 +41,9 @@ def main(argv):
 			api_path = arg
 		elif opt in ('-a', '--apiport'):
 			api_port = arg
-			apiPath = 'http://'+ distributor_ip + ':' + str(api_port) + '/' + api_path
-			print(apiPath)
 		
+	apiPath = 'http://'+ distributor_ip + ':' + str(api_port) + '/' + api_path
+	print(apiPath)
 	#Verbindung zum Verteiler aufbauen
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	retry = True
