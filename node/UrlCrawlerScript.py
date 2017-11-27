@@ -9,29 +9,6 @@ from threading import Thread
 from scrapy.crawler import signals
 import os
 
-#Diese Klasse bereitet einen Twisted Reactor vor, der mittels Process geforked wird und somit mehrfach ausgefuehrt werden kann
-class UrlCrawlerScriptold(Process):
-	def __init__(self, spider, userAgent):
-		Process.__init__(self)
-		#settings = {'USER_AGENT': userAgent, 'LOG_ENABLED': False}
-		#settings['USER_AGENT': userAgent]
-		BSettings = Settings()
-		BSettings.set('USER_AGENT', userAgent, 30)
-		BSettings.set('LOG_ENABLED', False, 30)
-		self.crawler = Crawler(spider, BSettings)
-		#self.crawler.configure()
-		self.crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
-		#self.userAgent = userAgent
-		self.spider = spider
-
-	def run(self):
-		self.crawler.crawl(self.spider)
-		#self.crawler.start()
-		reactor.run()
-		#process = CrawlerProcess({'USER_AGENT': self.userAgent, 'LOG_ENABLED': False})
-		#process.crawl(self.spider)
-		#Thread(target=process.start).start()
-
 class UrlCrawlerScript():
 	def __init__(self, spider):
 		print("CrawlerObjekt erstellen")
@@ -44,10 +21,10 @@ class UrlCrawlerScript():
 		self.spider = spider
 
 	def run(self, userAgent):
-		print("Child Process erstellen")
+		print("Spider wird aufgerufen")
 		newPid = os.fork()
 		if newPid == 0:
-			print("entered Child")
+			print("Spider Prozess erfolgreich dupliziert")
 			self.BSettings.set('USER_AGENT', userAgent, 30)
 			crawler = Crawler(self.spider, self.BSettings)
 			crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
@@ -58,10 +35,10 @@ class UrlCrawlerScript():
 			os.wait()
 
 	def runSoSpider(self, userAgent, urls):
-		print ("Child Prozess erstellen")
+		print ("Spider wird aufgerufen")
 		newPid = os.fork()
 		if newPid == 0:
-			print("Child Prozess erstellt")
+			print("Spider Prozess erfolgreich dupliziert")
 			self.BSettings.set('USER_AGENT', userAgent, 30)
 			#self.BSettings.set('ITEM_PIPELINES', {'so_scraper.pipelines.ResultPipeline': 300}, 30)
 			#self.spider.start_urls = urls
@@ -74,9 +51,7 @@ class UrlCrawlerScript():
 			crawler = Crawler(self.spider, self.BSettings)
 			crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
 			crawler.crawl(self.spider)
-			print("Fehlersuche")
 			reactor.run()
-			print("reactor.run ausgefuehrt")
 			os._exit(0)
 		else:
 			os.wait()
