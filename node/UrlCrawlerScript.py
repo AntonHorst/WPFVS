@@ -2,7 +2,7 @@ from scrapy.crawler import Crawler
 #from scrapy.conf import settings
 #from scrapy import log 
 from twisted.internet import reactor
-from billiard import Process
+
 from scrapy.utils.project import get_project_settings
 from scrapy.settings import Settings
 from threading import Thread
