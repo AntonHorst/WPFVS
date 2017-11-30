@@ -46,3 +46,7 @@ echo 'erstelle virtuelle Umgebung'
 python3.6 -m venv WPF_Scraper
 source WPF_Scraper/bin/activate
 pip install scrapy
+pip install flask
+pip install flask_restful
+pip install requests
+
