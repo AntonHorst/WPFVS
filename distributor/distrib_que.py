@@ -86,6 +86,11 @@ class Distributor(Resource):
 
 	
 def main(argv):
+	node_ip = ''
+	node_port = 5000
+	node_apiPath = 'node'
+	apiPath = 'test'
+	helpstring ="python distrib_que.py -n Node IP -p node Port -a Api_Path_Node"
 	try:
 		opts, args = getopt.getopt(argv, 'hn:p:a:', ['node=', 'port=', 'apipath=', 'help'])
 	except getopt.Getopt.Error:
@@ -140,11 +145,6 @@ def main(argv):
 	limit = 2000
 	api.add_resource(Distributor, '/distributor')
 if __name__ == '__main__':
-	node_ip = ''
-	node_port = 5000
-	node_apiPath = 'node'
-	apiPath = 'test'
-	helpstring ="python distrib_que.py -n Node IP -p node Port -a Api_Path_Node"
 	main(sys.argv[1:])
 	#startRoutine()
 	print("Start Routine abgeschlossen")
