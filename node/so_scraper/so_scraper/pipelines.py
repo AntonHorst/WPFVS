@@ -17,7 +17,7 @@ class SoScraperPipeline(object):
 
 class ResultPipeline(object):
 	#print("##########Entered Pipeline#########")
-	apiPath = "http://localhost:45678/distributor"
+	apiPath = "http://139.6.65.29:45678/distributor"
 	def process_item(self, item, spider):
 		for tag in item['tags']:
 			item['answers'] = 0
