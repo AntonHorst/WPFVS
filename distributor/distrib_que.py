@@ -9,6 +9,7 @@ from serv import Server
 import threading
 import time
 import json
+from db import DB
 #Vorbereitung der Rest Api
 app = Flask(__name__)
 api = Api(app)
@@ -21,7 +22,7 @@ class Distributor(Resource):
 	ua_counter=0
 
 	results = defaultdict(str) #{'tag':[views,answers,votes]}
-
+	db = DB()
 
 	#gibt das nachste Arbeitspaket in der Form [UserAgent, [urls]] zurueck und False, falls kein Paket mehr vorhanden ist
 	def getNextPackage(self):
@@ -73,13 +74,14 @@ class Distributor(Resource):
 		answers = int(request.form['answers'])
 		views = int(request.form['views'])
 		print (tag + " " + str(votes) + " " + str(answers) + " " + str(views))
-		if tag in type(self).results:
-			type(self).results[tag][0] = type(self).results[tag][0] + votes
-			type(self).results[tag][1] = type(self).results[tag][1] + answers 
-			type(self).results[tag][2] = type(self).results[tag][2] + views
-		else:
-			type(self).results[tag] = [votes, answers, views]
-		print ("Ergebniss gespeichert")
+		self.db.insert(tag, votes, views, answers)
+		#if tag in type(self).results:
+		#	type(self).results[tag][0] = type(self).results[tag][0] + votes
+		#	type(self).results[tag][1] = type(self).results[tag][1] + answers 
+		#	type(self).results[tag][2] = type(self).results[tag][2] + views
+		#else:
+		#	type(self).results[tag] = [votes, answers, views]
+		#print ("Ergebniss gespeichert")
 		#print(type(self).results)
 		return 201
 
