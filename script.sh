@@ -50,3 +50,5 @@ pip install flask
 pip install flask_restful
 pip install requests
 
+echo 'Erstelle Aliase in die .profile'
+cat .profile >> ~/.profile 
