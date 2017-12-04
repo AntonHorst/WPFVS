@@ -17,7 +17,7 @@ class SleepRetryMiddleware(RetryMiddleware):
 	def process_response(self, request, response, spider):
 		timeout = 120
 		if response.status in [403,500, 429, 503]:
-			print("Zugriff durch Stackoverflow gesperrt, Schlafe fuer " + timeout " Sekunden")
+			#print("Zugriff durch Stackoverflow gesperrt, Schlafe fuer " + timeout " Sekunden")
 			sleep(timeout)
 			reason = response_status_message(response.status)
 			return self._retry(request, reason, spider) or response
