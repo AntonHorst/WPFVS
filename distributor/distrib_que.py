@@ -14,7 +14,7 @@ app = Flask(__name__)
 api = Api(app)
 
 class Distributor(Resource):
-	limit = 2000
+	limit = 999412
 	with open("/Users/webcrawler/Projects/WPFVS/distributor/useragent.txt", "rt") as f:
 		agent = [userAgent.strip() for userAgent in f.readlines()]
 	i=0
@@ -42,7 +42,7 @@ class Distributor(Resource):
 			package.append(current_agent)
 			package.append(urls)
 		
-			if type(self).ua_counter >= len(self.agent):  
+			if type(self).ua_counter >= len(self.agent)-1:  
 				type(self).ua_counter=0
 			else:
 				type(self).ua_counter+=1
@@ -142,7 +142,7 @@ def main(argv):
 	#pageCount = int(r.text) 
 	print ("Pagecount erhalten: " + pageCount)
 	#set limit
-	limit = 2000
+	limit = 999412
 	api.add_resource(Distributor, '/distributor')
 if __name__ == '__main__':
 	main(sys.argv[1:])
