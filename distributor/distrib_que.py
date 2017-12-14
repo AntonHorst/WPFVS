@@ -16,7 +16,7 @@ api = Api(app)
 class Distributor(Resource):
 	#limit = 999412
 	
-	with open ('~/Projects/WPFVS/distributor/limit.txt', 'rt') as f:
+	with open ('/Users/webcrawler/Projects/WPFVS/distributor/limit.txt', 'rt') as f:
 		limit = f.read(pageCount)
 	with open("/Users/webcrawler/Projects/WPFVS/distributor/useragent.txt", "rt") as f:
 		agent = [userAgent.strip() for userAgent in f.readlines()]
@@ -147,7 +147,7 @@ def main(argv):
 	print ("Pagecount erhalten: " + pageCount)
 	#set limit
 	filename = 'limit.txt'
-	with open ('~/Projects/WPFVS/distributor/limit.txt', 'wt') as f:
+	with open ('/Users/webcrawler/Projects/WPFVS/distributor/limit.txt', 'wt') as f:
 		f.write(pageCount)
 
 	#limit = pageCount
