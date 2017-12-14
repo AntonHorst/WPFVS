@@ -33,17 +33,14 @@ class so_spider(scrapy.Spider):
 			TAG_SELECTOR = '.post-tag ::text'
 			VIEW_SELECTOR = '.views ::text'
 			VOTE_SELECTOR = '.vote-count-post ::text'
-			try:
-				ANSWER_SELECTOR = '.status answered  ::text'
-			except ValueError:
-				ANSWER_SELECTOR = '0'
+			ANSWER_SELECTOR = '//strong/text()'
 			#UNANSWERED_SELECTOR = '.status unanswered ::text'
 			#answers = question.css('.status')
 			l.add_css('tags', TAG_SELECTOR)
 			#l.add_value('tagAmount', len(question.css(TAG_SELECTOR)))
 			l.add_css('views', VIEW_SELECTOR)
 			l.add_css('votes', VOTE_SELECTOR)
-			l.add_css('answers', ANSWER_SELECTOR)
+			l.add_xpath('answers', ANSWER_SELECTOR)
 			#l.add_css('answers', UNANSWERED_SELECTOR)
 			yield l.load_item()
 			"""	

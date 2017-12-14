@@ -20,5 +20,6 @@ class ResultPipeline(object):
 	apiPath = "http://139.6.65.29:45678/distributor"
 	def process_item(self, item, spider):
 		for tag in item['tags']:
-			item['answers'] = 0
+			if item['answers'] = None:
+				item['answers'] = 0
 			put(self.apiPath, data={'tag': tag, 'votes': item['votes'], 'answers': item['answers'], 'views': item['views']})
