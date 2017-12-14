@@ -17,7 +17,7 @@ class Distributor(Resource):
 	#limit = 999412
 	
 	with open ('/Users/webcrawler/Projects/WPFVS/distributor/limit.txt', 'rt') as f:
-		limit = f.read()
+		limit = int(f.read())
 	with open("/Users/webcrawler/Projects/WPFVS/distributor/useragent.txt", "rt") as f:
 		agent = [userAgent.strip() for userAgent in f.readlines()]
 	i=0
