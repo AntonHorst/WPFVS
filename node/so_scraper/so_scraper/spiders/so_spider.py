@@ -10,7 +10,7 @@ class so_spider(scrapy.Spider):
 	custom_settings = {
 		'ITEM_PIPELINES': {'so_scraper.so_scraper.pipelines.ResultPipeline': 300},
 		'DOWNLOADER_MIDDLEWARES': {'scrapy.downloadermiddlewares.retry.RetryMiddleware': None, 'so_scraper.so_scraper.middlewares.SleepRetryMiddleware': 100,},
-		'DOWNLOAD_DELAY': 0.5,
+		#'DOWNLOAD_DELAY': 0.5,
 	}
 	def start_requests(self):
 		print("###########Start Requests############")
