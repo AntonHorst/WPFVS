@@ -25,7 +25,6 @@ class DB:
 		
 		sqlCommand = """INSERT OR REPLACE INTO stack (tag, votes, views, answers) VALUES ('"""+ tag +"""', (SELECT CASE  WHEN exists(SELECT 1  FROM stack WHERE tag='"""+ tag + """')THEN (SELECT votes FROM stack WHERE tag='"""+ tag + """') + """ + str(vote) + """  ELSE """ + str(vote) + """  END ), (SELECT CASE WHEN exists (SELECT 1 FROM stack WHERE tag='"""+ tag + """') THEN (SELECT views FROM stack WHERE tag='"""+ tag + """') + """+str(view)+ """ ELSE  """+str(view)+ """ END),(SELECT CASE WHEN exists (SELECT 1 FROM stack WHERE tag ='"""+ tag + """') THEN (SELECT answers FROM stack WHERE tag='"""+ tag + """') + """ + str(answer) + """ ELSE """ + str(answer) + """ END));"""
 
-		print (sqlCommand)
 		#sleep(100)
 				
 		self.cursor.execute(sqlCommand)
