@@ -18,7 +18,7 @@ class so_spider(scrapy.Spider):
 		#	'https://stackoverflow.com/questions?page=2000&sort=newest',
 		#	'https://stackoverflow.com/questions?page=3000&sort=newest',
 		#]
-		with open("/Users/webcrawler/Projects/WPFVS/node/so_scraper/so_scraper/spiders/urls.txt", "rt") as f:
+		with open("~/Projects/WPFVS/node/so_scraper/so_scraper/spiders/urls.txt", "rt") as f:
 			self.start_urls = [url.strip() for url in f.readlines()]
 		print(self.start_urls)
 		for link in self.start_urls:

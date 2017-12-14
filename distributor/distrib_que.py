@@ -13,9 +13,11 @@ from db import DB
 #Vorbereitung der Rest Api
 app = Flask(__name__)
 api = Api(app)
-
 class Distributor(Resource):
-	limit = 999412
+	#limit = 999412
+	
+	with open ('~/Projects/WPFVS/distributor/limit.txt', 'rt') as f:
+		limit = f.read(pageCount)
 	with open("/Users/webcrawler/Projects/WPFVS/distributor/useragent.txt", "rt") as f:
 		agent = [userAgent.strip() for userAgent in f.readlines()]
 	i=0
@@ -144,7 +146,11 @@ def main(argv):
 	#pageCount = int(r.text) 
 	print ("Pagecount erhalten: " + pageCount)
 	#set limit
-	limit = 999412
+	filename = 'limit.txt'
+	with open ('~/Projects/WPFVS/distributor/limit.txt', 'wt') as f:
+		f.write(pageCount)
+
+	#limit = pageCount
 	api.add_resource(Distributor, '/distributor')
 if __name__ == '__main__':
 	main(sys.argv[1:])
