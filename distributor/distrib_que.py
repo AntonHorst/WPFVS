@@ -23,6 +23,7 @@ class Distributor(Resource):
 		agent = [userAgent.strip() for userAgent in f.readlines()]
 	i=0
 	ua_counter=0
+	limit = 3000
 
 	results = defaultdict(str) #{'tag':[views,answers,votes]}
 	db = DB()
@@ -65,6 +66,9 @@ class Distributor(Resource):
 		if len(package[1]) == 0:
 			print("QUE: INHALT DES ARBEITSPAKETS LEER: SENDE 404")
 			print(type(self).results)
+			#Zeitstempel Ende
+			endeZeit = time.clock()
+			print("Laufzeit:  " + endeZeit - startZeit)
 			abort(404)
 		return {'package': package}
 	
@@ -91,6 +95,8 @@ class Distributor(Resource):
 
 	
 def main(argv):
+	#Zeit schreiben
+	startZeit = time.clock()
 	node_ip = ''
 	node_port = 5000
 	node_apiPath = 'node'
