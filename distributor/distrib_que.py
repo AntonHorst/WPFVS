@@ -13,6 +13,7 @@ from db import DB
 #Vorbereitung der Rest Api
 app = Flask(__name__)
 api = Api(app)
+startZeit = time.time()
 class Distributor(Resource):
 	#limit = 999412
 	
@@ -23,7 +24,7 @@ class Distributor(Resource):
 		agent = [userAgent.strip() for userAgent in f.readlines()]
 	i=0
 	ua_counter=0
-	limit = 3000
+	limit = 25
 
 	results = defaultdict(str) #{'tag':[views,answers,votes]}
 	db = DB()
@@ -67,8 +68,10 @@ class Distributor(Resource):
 			print("QUE: INHALT DES ARBEITSPAKETS LEER: SENDE 404")
 			print(type(self).results)
 			#Zeitstempel Ende
-			endeZeit = time.clock()
-			print("Laufzeit:  " + endeZeit - startZeit)
+			endeZeit = time.time()
+			print("Startzei: " + str(startZeit))
+			print("Endzeit: " + str(endeZeit))
+			print("Laufzeit:  " + str(endeZeit - startZeit))
 			abort(404)
 		return {'package': package}
 	
@@ -96,7 +99,7 @@ class Distributor(Resource):
 	
 def main(argv):
 	#Zeit schreiben
-	startZeit = time.clock()
+	startZeit = time.time()
 	node_ip = ''
 	node_port = 5000
 	node_apiPath = 'node'
